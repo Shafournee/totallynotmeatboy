@@ -44,11 +44,16 @@ public class Player : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if(move == MoveDirection.left)
+        if(rigidBody.velocity.y >= 20f)
+        {
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 20f);
+        }
+
+        if(move == MoveDirection.left && rigidBody.velocity.x > -speedCap)
         {
             rigidBody.AddForce(new Vector2(-speed, 0f));
         }
-        else if(move == MoveDirection.right)
+        else if(move == MoveDirection.right && rigidBody.velocity.x < speedCap)
         {
             rigidBody.AddForce(new Vector2(speed, 0f));
         }
@@ -135,7 +140,7 @@ public class Player : MonoBehaviour {
 
     void Movement()
     {
-        if(Input.GetKey(right) && rigidBody.velocity.x < speedCap)
+        if(Input.GetKey(right))
         {
             move = MoveDirection.right;
             animDirection = MoveDirection.right;
@@ -144,7 +149,7 @@ public class Player : MonoBehaviour {
                 anim.currentState = PlayerStates.running;
             }
         }
-        else if (Input.GetKey(left) && rigidBody.velocity.x > -speedCap)
+        else if (Input.GetKey(left))
         {
             move = MoveDirection.left;
             animDirection = MoveDirection.left;
@@ -181,14 +186,24 @@ public class Player : MonoBehaviour {
 
     bool PlayerCanJump()
     {
-        Vector2 playerBottom = new Vector2(0f, GetComponent<BoxCollider2D>().bounds.min.y);
+        Vector2 playerBottom = new Vector2(transform.position.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
         return Physics2D.Raycast(playerBottom, Vector2.down, .05f);
     }
 
     IEnumerator Jumping()
     {
-        yield return new WaitForFixedUpdate();
-        rigidBody.AddForce(new Vector2(0f, jumpSpeed));
+        for (int i = 1; i < 20; i++)
+        {
+            yield return new WaitForFixedUpdate();
+            if (Input.GetKeyUp(space))
+            {
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                yield break;
+            }
+            rigidBody.AddForce(new Vector2(0f, jumpSpeed / (i * 2.7f)));
+        }
+        
+        
     }
 
     IEnumerator WallJumping(float wallJumpVertSpeed)

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Exit : MonoBehaviour {
 
+    [SerializeField] List<Sprite> sprites;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,18 @@ public class Exit : MonoBehaviour {
     {
         if(collider.GetComponent<Player>() != null)
         {
-            Destroy(collider.gameObject);
+            collider.gameObject.SetActive(false);
+            StartCoroutine(GoalAnimation());
         }
+    }
+
+    IEnumerator GoalAnimation()
+    {
+        for (int i = 0; i < sprites.Count; i++)
+        {
+            GetComponent<SpriteRenderer>().sprite = sprites[i];
+            yield return new WaitForSeconds(.1f);
+        }
+
     }
 }

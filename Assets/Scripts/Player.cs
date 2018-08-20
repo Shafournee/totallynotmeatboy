@@ -21,18 +21,24 @@ public class Player : MonoBehaviour {
 
     PlayerAnimationHandler anim;
 
+
+
     [SerializeField] float speed = 10f;
     [SerializeField] float airSpeed = 5f;
     [SerializeField] float trueSpeed;
     [SerializeField] float speedCap = 15f;
     [SerializeField] float jumpSpeed = 2000f;
-    [SerializeField] float vertJumpSpeed = 1000f;
+    float vertJumpSpeed = 1000f;
 
     bool isJumping;
 
     bool slidingDownWall;
 
     bool CurrentlyJumping;
+
+    bool CanWallJump;
+
+    bool firstTimeOffWall;
 
     // Use this for initialization
     void Start () {
@@ -97,49 +103,52 @@ public class Player : MonoBehaviour {
 
     void WallJump()
     {
-        Vector2 playerRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x + .01f + .01f, transform.position.y);
+        Vector2 playerRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x + .01f, transform.position.y);
         Vector2 playerLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x - .01f, transform.position.y);
         if(Physics2D.Raycast(playerRight, Vector2.right, .01f))
         {
+
             if(!PlayerCanJump() && Input.GetKey(right))
             {
+                // If you're on a wall, the player is sliding down the wall and can wall jump
+                CanWallJump = true;
                 slidingDownWall = true;
+                // This is used to allow the player to have leniency with their jump. It gives them a few frames after leaving the wall to still do it 
+                firstTimeOffWall = true;
                 anim.currentState = PlayerStates.wallsliding;
                 vertJumpSpeed = -1000f;
 
-            }
-            else
-            {
-                slidingDownWall = false;
             }
         }
         else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))
         {
             if (!PlayerCanJump() && Input.GetKey(left))
             {
+                CanWallJump = true;
                 slidingDownWall = true;
+                firstTimeOffWall = true;
                 anim.currentState = PlayerStates.wallsliding;
                 vertJumpSpeed = 1000f;
-            }
-            else
-            {
-                slidingDownWall = false;
             }
         }
         else if (!PlayerCanJump())
         {
+            // If it's the players first time off the wall they can wall jump
+            if(firstTimeOffWall)
+                StartCoroutine(WaitABitForWallJumps());
             slidingDownWall = false;
             anim.currentState = PlayerStates.jumping;
         }
         else
         {
+            CanWallJump = false;
             slidingDownWall = false;
         }
     }
 
     void Movement()
     {
-        if(Input.GetKeyDown(space) && slidingDownWall)
+        if(Input.GetKeyDown(space) && (slidingDownWall || CanWallJump))
         {
             StartCoroutine(WallJumping());
             anim.currentState = PlayerStates.jumping;
@@ -185,7 +194,7 @@ public class Player : MonoBehaviour {
     bool PlayerCanJump()
     {
         Vector2 playerBottomLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
-        Vector2 playerBottomRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y + .01f);
+        Vector2 playerBottomRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
         if (Physics2D.Raycast(playerBottomLeft, Vector2.down, .01f) || Physics2D.Raycast(playerBottomRight, Vector2.down, .01f))
             return true;
 
@@ -233,8 +242,9 @@ public class Player : MonoBehaviour {
         slidingDownWall = false;
         yield return new WaitForFixedUpdate();
         rigidBody.velocity = new Vector2(0f, 0f);
-        rigidBody.AddForce(new Vector2(vertJumpSpeed, jumpSpeed));
+        StartCoroutine(VertJumpingForce());
         yield return new WaitForFixedUpdate();
+
 
         while (CurrentlyJumping)
         {
@@ -259,5 +269,49 @@ public class Player : MonoBehaviour {
             }
             yield return null;
         }
+    }
+
+    IEnumerator VertJumpingForce()
+    {
+        trueSpeed = 0;
+        rigidBody.AddForce(new Vector2(vertJumpSpeed, jumpSpeed));
+        yield return new WaitForFixedUpdate();
+        if(vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left)
+        {
+            rigidBody.velocity = new Vector2(vertJumpSpeed/100f, rigidBody.velocity.y);
+            trueSpeed = airSpeed;
+            yield break;
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            rigidBody.AddForce(new Vector2(vertJumpSpeed/2, 0f));
+            yield return new WaitForFixedUpdate();
+            if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left)
+            {
+                rigidBody.velocity = new Vector2(vertJumpSpeed / 100f, rigidBody.velocity.y);
+                trueSpeed = airSpeed;
+                yield break;
+            }
+
+        }
+        rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
+        trueSpeed = airSpeed;
+    }
+
+    IEnumerator WaitABitForWallJumps()
+    {
+        //If you're currently jumping you can't jump
+        if(CurrentlyJumping)
+        {
+            CanWallJump = false;
+        }
+        else
+        {
+            CanWallJump = true;
+        }
+        firstTimeOffWall = false;
+
+        yield return new WaitForSeconds(.2f);
+        CanWallJump = false;
     }
 }

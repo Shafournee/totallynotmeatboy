@@ -6,6 +6,8 @@ public enum PlayerStates { idle, running, wallsliding, jumping }
 
 public class PlayerAnimationHandler : MonoBehaviour {
 
+    // TODO FIGURE OUT WHY ANIMATIONS BUG OUT SOMETIMES
+
     public List<Sprite> sprites;
     SpriteRenderer playerSpriteRenderer;
     public PlayerStates currentState;
@@ -58,40 +60,55 @@ public class PlayerAnimationHandler : MonoBehaviour {
         }
     }
 
+    //TODO, Figure out why when jumping the animation sometimes jumps between the running and jumping anim
+    //This isn't game breaking, but annoying to see.
+
     public void Animator()
     {
-        if (currentState == PlayerStates.idle)
-            playerSpriteRenderer.sprite = sprites[0];
-        else if (currentState == PlayerStates.running && !runningCoroutine)
-            StartCoroutine(Running());
-        else if (currentState == PlayerStates.wallsliding)
-            playerSpriteRenderer.sprite = sprites[5];
+        if (currentState == PlayerStates.wallsliding)
+            StartCoroutine(SlidingDownWall());
         else if (currentState == PlayerStates.jumping)
             playerSpriteRenderer.sprite = sprites[4];
+        else if (currentState == PlayerStates.running && !runningCoroutine)
+            StartCoroutine(Running());
+        else if (currentState == PlayerStates.idle)
+            playerSpriteRenderer.sprite = sprites[0];
+        
     }
 
 
-    public void SlidingDownWall()
+    IEnumerator SlidingDownWall()
     {
-        playerSpriteRenderer.sprite = sprites[5];
-        playerSpriteRenderer.flipX = true;
-    }
+        while(currentState == PlayerStates.wallsliding)
+        {
+            playerSpriteRenderer.sprite = sprites[5];
+            yield return null;
+        }
 
-    public void Jumping()
-    {
-        playerSpriteRenderer.sprite = sprites[4];
     }
 
     IEnumerator Running()
     {
 
         runningCoroutine = true;
-
-        for (int i = 1; i < 4; i++)
+        while(currentState == PlayerStates.running)
         {
-            playerSpriteRenderer.sprite = sprites[i];
-            yield return new WaitForSeconds(.1f);
+            for (int i = 1; i < 4; i++)
+            {
+                playerSpriteRenderer.sprite = sprites[i];
+
+                // If they stop running break out of the coroutine
+                if (currentState != PlayerStates.running)
+                {
+                    runningCoroutine = false;
+                    yield break;
+                }
+
+
+                yield return new WaitForSeconds(.1f);
+            }
         }
+
 
         runningCoroutine = false;
     }

@@ -6,6 +6,9 @@ public enum MoveDirection { right, left, none };
 
 public class Player : MonoBehaviour {
 
+    //TODO, make a buffer for wall jumping
+    //TODO, add controller support
+
     KeyCode right = KeyCode.D;
     KeyCode left = KeyCode.A;
     KeyCode space = KeyCode.Space;
@@ -19,17 +22,20 @@ public class Player : MonoBehaviour {
     PlayerAnimationHandler anim;
 
     [SerializeField] float speed = 10f;
+    [SerializeField] float airSpeed = 5f;
+    [SerializeField] float trueSpeed;
     [SerializeField] float speedCap = 15f;
-    [SerializeField] float jumpSpeed = 1000f;
+    [SerializeField] float jumpSpeed = 2000f;
+    [SerializeField] float vertJumpSpeed = 1000f;
 
     bool isJumping;
 
-    bool isHoldingDown;
-
     bool slidingDownWall;
 
-	// Use this for initialization
-	void Start () {
+    bool CurrentlyJumping;
+
+    // Use this for initialization
+    void Start () {
         rigidBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimationHandler>();
         anim.currentState = PlayerStates.idle;
@@ -39,40 +45,46 @@ public class Player : MonoBehaviour {
 	void Update () {
         Movement();
         WallJump();
-        print(slidingDownWall);
+
 	}
 
     private void FixedUpdate()
     {
+        // Set the speed to be the airspeed or groundspeed depending if aired or grounded
+        if(PlayerCanJump())
+        {
+            trueSpeed = speed;
+        }
+        else
+        {
+            trueSpeed = airSpeed;
+        }
+
+        // Cap the players movement speed at 20f
         if(rigidBody.velocity.y >= 20f)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 20f);
         }
 
-        if(move == MoveDirection.left && rigidBody.velocity.x > -speedCap)
+        // If the player goes from left to right immediately, set their velocity to zero first so they don't slide
+        if(rigidBody.velocity.x > 0 && move == MoveDirection.left || rigidBody.velocity.x < 0 && move == MoveDirection.right)
         {
-            rigidBody.AddForce(new Vector2(-speed, 0f));
+            rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
         }
+        // Moving left
+        else if(move == MoveDirection.left && rigidBody.velocity.x > -speedCap)
+        {
+            rigidBody.AddForce(new Vector2(-trueSpeed, 0f));
+        }
+        // Moving right
         else if(move == MoveDirection.right && rigidBody.velocity.x < speedCap)
         {
-            rigidBody.AddForce(new Vector2(speed, 0f));
+            rigidBody.AddForce(new Vector2(trueSpeed, 0f));
         }
+        // If the player is not moving, set their velocity to zero
         else if(move == MoveDirection.none)
         {
-            if (rigidBody.velocity.x < 7f && rigidBody.velocity.x > -7f && PlayerCanJump())
-            {
-                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
-
-            }
-            else
-            {
-                rigidBody.AddForce(new Vector2(-rigidBody.velocity.x * 5f, 0f));
-            }
-        }
-
-        if(isHoldingDown)
-        {
-            rigidBody.AddForce(new Vector2(0f, -20f));
+            rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
         }
 
         if(slidingDownWall)
@@ -85,42 +97,29 @@ public class Player : MonoBehaviour {
 
     void WallJump()
     {
-        Vector2 playerRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x + .01f, transform.position.y);
+        Vector2 playerRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x + .01f + .01f, transform.position.y);
         Vector2 playerLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x - .01f, transform.position.y);
-        if(Physics2D.Raycast(playerRight, Vector2.right, .05f))
+        if(Physics2D.Raycast(playerRight, Vector2.right, .01f))
         {
             if(!PlayerCanJump() && Input.GetKey(right))
             {
-                if(rigidBody.velocity.y < 0)
-                {
-                    slidingDownWall = true;
-                    anim.currentState = PlayerStates.wallsliding;
-                }
-                if (Input.GetKeyDown(space))
-                {
-                    StartCoroutine(WallJumping(-600f));
-                    anim.currentState = PlayerStates.jumping;
-                }
+                slidingDownWall = true;
+                anim.currentState = PlayerStates.wallsliding;
+                vertJumpSpeed = -1000f;
+
             }
             else
             {
                 slidingDownWall = false;
             }
         }
-        else if(Physics2D.Raycast(playerLeft, Vector2.left, .05f))
+        else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))
         {
             if (!PlayerCanJump() && Input.GetKey(left))
             {
-                if (rigidBody.velocity.y < 0)
-                {
-                    slidingDownWall = true;
-                    anim.currentState = PlayerStates.wallsliding;
-                }
-                if (Input.GetKeyDown(space))
-                {
-                    StartCoroutine(WallJumping(600f));
-                    anim.currentState = PlayerStates.jumping;
-                }
+                slidingDownWall = true;
+                anim.currentState = PlayerStates.wallsliding;
+                vertJumpSpeed = 1000f;
             }
             else
             {
@@ -140,6 +139,17 @@ public class Player : MonoBehaviour {
 
     void Movement()
     {
+        if(Input.GetKeyDown(space) && slidingDownWall)
+        {
+            StartCoroutine(WallJumping());
+            anim.currentState = PlayerStates.jumping;
+        }
+        else if(Input.GetKeyDown(space) && PlayerCanJump())
+        {
+            StartCoroutine(Jumping());
+            anim.currentState = PlayerStates.jumping;
+        }
+
         if(Input.GetKey(right))
         {
             move = MoveDirection.right;
@@ -168,49 +178,86 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if(Input.GetKeyDown(space) && PlayerCanJump())
-        {
-            StartCoroutine(Jumping());
-            anim.currentState = PlayerStates.jumping;
-        }
 
-        if(Input.GetKeyDown(down))
-        {
-            isHoldingDown = true;
-        }
-        else if(Input.GetKeyUp(down))
-        {
-            isHoldingDown = false;
-        }
+
     }
 
     bool PlayerCanJump()
     {
-        Vector2 playerBottom = new Vector2(transform.position.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
-        return Physics2D.Raycast(playerBottom, Vector2.down, .05f);
+        Vector2 playerBottomLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
+        Vector2 playerBottomRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y + .01f);
+        if (Physics2D.Raycast(playerBottomLeft, Vector2.down, .01f) || Physics2D.Raycast(playerBottomRight, Vector2.down, .01f))
+            return true;
+
+        else
+            return false;
     }
 
     IEnumerator Jumping()
     {
-        for (int i = 1; i < 20; i++)
+        // Keep track of the initial position, and if they're currently jumping
+        // Wait until the next fixed update to apply force
+        Vector2 initialJump = transform.position;
+        yield return new WaitForFixedUpdate();
+        rigidBody.AddForce(new Vector2(0f, jumpSpeed));
+        CurrentlyJumping = true;
+
+        while(CurrentlyJumping)
         {
-            yield return new WaitForFixedUpdate();
-            if (Input.GetKeyUp(space))
+            // If velocity in the Y direction becomes zero break out of the loop
+            if (rigidBody.velocity.y < 0 || transform.position.y >= initialJump.y + 4f)
             {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
-                yield break;
+                CurrentlyJumping = false;
             }
-            rigidBody.AddForce(new Vector2(0f, jumpSpeed / (i * 2.7f)));
+
+            // Otherwise, if they stop holding space set velocity to zero and break out
+            else if(Input.GetKeyUp(space))
+            {
+
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                CurrentlyJumping = false;
+            }
+            yield return null;
         }
         
         
     }
 
-    IEnumerator WallJumping(float wallJumpVertSpeed)
+    IEnumerator WallJumping()
     {
+        // Keep track of the initial position, and if they're currently jumping
+        // Wait until the next fixed update to apply force
+        Vector2 initialJump = transform.position;
+        CurrentlyJumping = true;
         slidingDownWall = false;
         yield return new WaitForFixedUpdate();
         rigidBody.velocity = new Vector2(0f, 0f);
-        rigidBody.AddForce(new Vector2(wallJumpVertSpeed, jumpSpeed));
+        rigidBody.AddForce(new Vector2(vertJumpSpeed, jumpSpeed));
+        yield return new WaitForFixedUpdate();
+
+        while (CurrentlyJumping)
+        {
+            if (move == MoveDirection.right && rigidBody.velocity.x < 0 || move == MoveDirection.left && rigidBody.velocity.x > 0)
+            {
+                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
+            }
+
+            // If velocity in the Y direction becomes zero break out of the loop
+            else if (rigidBody.velocity.y < 0 || transform.position.y >= initialJump.y + 4f)
+            {
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                CurrentlyJumping = false;
+            }
+
+            // Otherwise, if they stop holding space set velocity to zero and break out
+            else if (Input.GetKeyUp(space))
+            {
+
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                CurrentlyJumping = false;
+            }
+            yield return null;
+        }
     }
 }

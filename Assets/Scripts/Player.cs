@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
 
         if(slidingDownWall)
         {
-            rigidBody.AddForce(new Vector2(0f, 8f));
+            rigidBody.AddForce(new Vector2(0f, 5f));
         }
 
         rigidBody.AddForce(new Vector2(0f, -2f));
@@ -238,17 +238,25 @@ public class Player : MonoBehaviour {
         // Keep track of the initial position, and if they're currently jumping
         // Wait until the next fixed update to apply force
         Vector2 initialJump = transform.position;
-        CurrentlyJumping = true;
+
         slidingDownWall = false;
         yield return new WaitForFixedUpdate();
         rigidBody.velocity = new Vector2(0f, 0f);
         StartCoroutine(VertJumpingForce());
         yield return new WaitForFixedUpdate();
 
-
+        rigidBody.AddForce(new Vector2(0f, jumpSpeed));
+        CurrentlyJumping = true;
         while (CurrentlyJumping)
         {
-            if (move == MoveDirection.right && rigidBody.velocity.x < 0 || move == MoveDirection.left && rigidBody.velocity.x > 0)
+            // Otherwise, if they stop holding space set velocity to zero and break out
+            if (Input.GetKeyUp(space))
+            {
+
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                CurrentlyJumping = false;
+            }
+            else if (move == MoveDirection.right && rigidBody.velocity.x < 0 || move == MoveDirection.left && rigidBody.velocity.x > 0)
             {
                 rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
             }
@@ -260,13 +268,7 @@ public class Player : MonoBehaviour {
                 CurrentlyJumping = false;
             }
 
-            // Otherwise, if they stop holding space set velocity to zero and break out
-            else if (Input.GetKeyUp(space))
-            {
-
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
-                CurrentlyJumping = false;
-            }
+            
             yield return null;
         }
     }
@@ -274,21 +276,13 @@ public class Player : MonoBehaviour {
     IEnumerator VertJumpingForce()
     {
         trueSpeed = 0;
-        rigidBody.AddForce(new Vector2(vertJumpSpeed, jumpSpeed));
-        yield return new WaitForFixedUpdate();
-        if(vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left)
-        {
-            rigidBody.velocity = new Vector2(vertJumpSpeed/100f, rigidBody.velocity.y);
-            trueSpeed = airSpeed;
-            yield break;
-        }
         for (int i = 0; i < 10; i++)
         {
             rigidBody.AddForce(new Vector2(vertJumpSpeed/2, 0f));
             yield return new WaitForFixedUpdate();
-            if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left)
+            if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left || Input.GetKeyUp(space))
             {
-                rigidBody.velocity = new Vector2(vertJumpSpeed / 100f, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y / 6);
                 trueSpeed = airSpeed;
                 yield break;
             }

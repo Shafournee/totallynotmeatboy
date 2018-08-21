@@ -37,6 +37,7 @@ public class TitleScreen : MonoBehaviour {
 
     }
 
+    //Animation that runs the player back and forth
     IEnumerator RunBackAndForth()
     {
         Vector2 startPos = new Vector3(-1000f, 631f);

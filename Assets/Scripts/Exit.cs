@@ -21,6 +21,7 @@ public class Exit : MonoBehaviour {
         if(collider.GetComponent<Player>() != null)
         {
             collider.gameObject.SetActive(false);
+            GameManager.instance.FinishLevel();
             StartCoroutine(GoalAnimation());
         }
     }
@@ -32,6 +33,7 @@ public class Exit : MonoBehaviour {
             GetComponent<SpriteRenderer>().sprite = sprites[i];
             yield return new WaitForSeconds(.1f);
         }
+        GameManager.instance.LevelFinished();
 
     }
 }

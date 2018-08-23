@@ -45,6 +45,7 @@ public class Player : MonoBehaviour {
         rigidBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<PlayerAnimationHandler>();
         anim.currentState = PlayerStates.idle;
+        GameManager.instance.StartLevel();
 	}
 	
 	// Update is called once per frame
@@ -95,10 +96,21 @@ public class Player : MonoBehaviour {
 
         if(slidingDownWall)
         {
-            rigidBody.AddForce(new Vector2(0f, 5f));
+            if(rigidBody.velocity.y > 5f)
+            {
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, 5f);
+            }
+            else if(rigidBody.velocity.y < -5f)
+            {
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, -5f);
+            }
+            else
+            {
+                rigidBody.AddForce(new Vector2(0f, 5f));
+            }
         }
 
-        rigidBody.AddForce(new Vector2(0f, -2f));
+        rigidBody.AddForce(new Vector2(0f, -4f));
     }
 
     void WallJump()
@@ -256,9 +268,13 @@ public class Player : MonoBehaviour {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
                 CurrentlyJumping = false;
             }
-            else if (move == MoveDirection.right && rigidBody.velocity.x < 0 || move == MoveDirection.left && rigidBody.velocity.x > 0)
+            else if (move == MoveDirection.right && rigidBody.velocity.x < 0 )
             {
-                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(-20f, rigidBody.velocity.y);
+            }
+            else if(move == MoveDirection.left && rigidBody.velocity.x > 0)
+            {
+                rigidBody.velocity = new Vector2(20f, rigidBody.velocity.y);
             }
 
             // If velocity in the Y direction becomes zero break out of the loop
@@ -282,7 +298,7 @@ public class Player : MonoBehaviour {
             yield return new WaitForFixedUpdate();
             if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left || Input.GetKeyUp(space))
             {
-                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y / 6);
+                rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
                 trueSpeed = airSpeed;
                 yield break;
             }

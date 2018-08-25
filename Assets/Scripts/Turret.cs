@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour {
 
-    public GameObject projectile;
+    [SerializeField] GameObject projectile;
 
-    public enum direction { right, left, down, up };
+    [SerializeField] enum direction { right, left, down, up };
 
-    public direction facingDirection;
+    [SerializeField] direction facingDirection;
 
-    public float shootingSpeed = 3f;
+    [SerializeField] float shootingSpeed = 3f;
+
+    [SerializeField] float projectileSpeed = 5f;
+
+    [SerializeField] GameObject particles;
 
     Vector3 pos;
     Vector2 velocity;
@@ -21,22 +25,22 @@ public class Turret : MonoBehaviour {
         if(facingDirection == direction.down)
         {
             pos = new Vector3(transform.position.x, transform.position.y - 1, 0);
-            velocity = new Vector2(0f, -5f);
+            velocity = new Vector2(0f, -projectileSpeed);
         }
         else if (facingDirection == direction.up)
         {
             pos = new Vector3(transform.position.x, transform.position.y + 1, 0);
-            velocity = new Vector2(0f, 5f);
+            velocity = new Vector2(0f, projectileSpeed);
         }
         else if (facingDirection == direction.left)
         {
             pos = new Vector3(transform.position.x - 1, transform.position.y, 0);
-            velocity = new Vector2(-5f, 0f);
+            velocity = new Vector2(-projectileSpeed, 0f);
         }
         else if (facingDirection == direction.right)
         {
             pos = new Vector3(transform.position.x + 1, transform.position.y, 0);
-            velocity = new Vector2(5f, 0f);
+            velocity = new Vector2(projectileSpeed, 0f);
         }
 
         StartCoroutine(SpawnProjectile());
@@ -53,10 +57,17 @@ public class Turret : MonoBehaviour {
         {
             GameObject newProjectile;
 
-            newProjectile = Instantiate(projectile, pos, transform.rotation);
+            newProjectile = Instantiate(projectile, pos, transform.rotation, gameObject.transform);
             newProjectile.GetComponent<Rigidbody2D>().velocity = velocity;
             yield return new WaitForSeconds(shootingSpeed);
         }
 
+    }
+
+    public IEnumerator SpawnParticles(Vector2 pos)
+    {
+        GameObject part = Instantiate(particles, pos, Quaternion.identity);
+        yield return new WaitForSeconds(.01f);
+        Destroy(part);
     }
 }

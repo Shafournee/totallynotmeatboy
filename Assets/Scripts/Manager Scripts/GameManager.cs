@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject playerSpawn;
     [SerializeField] GameObject spawnParticle;
     [SerializeField] GameObject deathParticle;
-    [SerializeField] List<string> sceneNames;
+    public List<string> sceneNames;
     int currentScene = 2;
 
     // This will tell us if a level was loaded from level select. If so, load back to level select, otherwise load to next level
@@ -53,14 +53,17 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            print(checkLevelTime);
+        }
 	}
 
 
     public void FinishLevel()
     {
         timer.GetComponent<Timer>().timerActive = false;
-        totalTime += timer.GetComponent<Timer>().time;
+        totalTime = timer.GetComponent<Timer>().time;
 
     }
 
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour {
         
         if(!levelLoadedFromLevelSelect)
         {
-            checkLevelTime = (Level)System.Enum.Parse(typeof(Level), "level" + (currentScene - 1).ToString());
+            checkLevelTime = (Level)System.Enum.Parse(typeof(Level), "Level" + (currentScene - 1).ToString());
             GetComponent<DataManager>().SubmitNewTime(timer.GetComponent<Timer>().time, checkLevelTime);
             currentScene++;
             SceneManager.LoadScene(currentScene);
@@ -85,6 +88,9 @@ public class GameManager : MonoBehaviour {
 
     public void playerDeathAnimation(Vector2 pos)
     {
+        //When the player dies pause the timer, but also add it to the total time
+        timer.GetComponent<Timer>().timerActive = false;
+        totalTime = timer.GetComponent<Timer>().time;
         GameObject newDeathParticle = Instantiate(deathParticle, pos, Quaternion.identity);
         newDeathParticle.GetComponent<ParticleSystem>().Play();
         StartCoroutine(ReloadLevel());

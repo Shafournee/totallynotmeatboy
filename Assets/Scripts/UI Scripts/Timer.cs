@@ -10,7 +10,7 @@ public class Timer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        time = GameManager.instance.totalTime;
 	}
 	
 	// Update is called once per frame

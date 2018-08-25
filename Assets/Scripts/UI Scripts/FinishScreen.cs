@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FinishScreen : MonoBehaviour {
 
@@ -21,4 +22,9 @@ public class FinishScreen : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene("TitleScreen");
+    }
 }

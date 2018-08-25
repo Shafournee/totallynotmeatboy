@@ -28,6 +28,7 @@ public class Saw : MonoBehaviour {
 	void Update () {
         sawBlade.transform.RotateAround(transform.position, vec, speed * Time.deltaTime);
         sawArm.transform.RotateAround(transform.position, vec, speed * Time.deltaTime);
+        sawBlade.transform.Rotate( Vector3.forward * Time.deltaTime * 600f);
     }
 
 }

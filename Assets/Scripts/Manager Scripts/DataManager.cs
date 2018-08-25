@@ -22,18 +22,18 @@ public class DataManager : MonoBehaviour {
     {
         if(level == Level.Level1)
         {
-            if (newTime < playerTimes.level1)
+            if (newTime < playerTimes.Level1)
             {
-                playerTimes.level1 = newTime;
-                PlayerPrefs.SetFloat("level1", playerTimes.level1);
+                playerTimes.Level1 = newTime;
+                PlayerPrefs.SetFloat("Level1", playerTimes.Level1);
             }
         }
         else if (level == Level.Level2)
         {
-            if (newTime < playerTimes.level2)
+            if (newTime < playerTimes.Level2)
             {
-                playerTimes.level2 = newTime;
-                PlayerPrefs.SetFloat("level2", playerTimes.level2);
+                playerTimes.Level2 = newTime;
+                PlayerPrefs.SetFloat("Level2", playerTimes.Level2);
             }
         }
         else if(level == Level.Finish)
@@ -55,11 +55,11 @@ public class DataManager : MonoBehaviour {
     {
         if (level == Level.Level1)
         {
-            return playerTimes.level1;
+            return playerTimes.Level1;
         }
-        else if (level == Level.Level2)
+        if (level == Level.Level2)
         {
-            return playerTimes.level2;
+            return playerTimes.Level2;
         }
         else
         {
@@ -75,30 +75,32 @@ public class DataManager : MonoBehaviour {
         {
             playerTimes.fullGameTime = PlayerPrefs.GetFloat("fullGameTime");
         }
-        else if (PlayerPrefs.HasKey("level1"))
+        if (PlayerPrefs.HasKey("Level1"))
         {
-            playerTimes.level1 = PlayerPrefs.GetFloat("level1");
+            playerTimes.Level1 = PlayerPrefs.GetFloat("Level1");
         }
-        else if (PlayerPrefs.HasKey("level2"))
+        if (PlayerPrefs.HasKey("Level2"))
         {
-            playerTimes.level2 = PlayerPrefs.GetFloat("level2");
+            playerTimes.Level2 = PlayerPrefs.GetFloat("Level2");
         }
     }
 
     private void SetTimes()
     {
-        if (playerTimes.fullGameTime == 0)
+        if (playerTimes.fullGameTime == 0f)
         {
             PlayerPrefs.SetFloat("fullGameTime", 100000f);
         }
-        else if (playerTimes.level1 < 1f)
+        if (playerTimes.Level1 == 0f)
         {
-            PlayerPrefs.SetFloat("level1", 100000f);
+            PlayerPrefs.SetFloat("Level1", 100000f);
         }
-        else if (playerTimes.level2 < 1f)
+        else if (playerTimes.Level2 == 0f)
         {
-            PlayerPrefs.SetFloat("level2", 100000f);
+            PlayerPrefs.SetFloat("Level2", 100000f);
         }
 
     }
+
+
 }

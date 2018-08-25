@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4327613750908886}
   - component: {fileID: 114125686716491266}
+  - component: {fileID: 114524901443941842}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -51,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59e51eb94a84d4469b30b7c8d588577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkLevelTime: 0
   totalTime: 0
   playerSpawn: {fileID: 1566559706444154, guid: 31e964bbe6b39e9468217a6028e01741,
     type: 2}
@@ -60,3 +62,14 @@ MonoBehaviour:
     type: 2}
   sceneNames: []
   levelLoadedFromLevelSelect: 0
+--- !u!114 &114524901443941842
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1300600123531582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbc1a3b71722364bbeec3e39f3e8dcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

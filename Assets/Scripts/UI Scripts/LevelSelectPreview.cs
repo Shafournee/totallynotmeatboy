@@ -25,16 +25,6 @@ public class LevelSelectPreview : MonoBehaviour {
 		
 	}
 
-    void DisplayInfo()
-    {
-        if(!PreviewBox.activeInHierarchy)
-        {
-            PreviewBox.SetActive(true);
-        }
-        imageBox.GetComponent<Image>().sprite = levelImage;
-        timeText.GetComponent<Text>().text = GameManager.instance.gameObject.GetComponent<DataManager>().GetLevelTime(levelTimeLoad).ToString("F2");
-    }
-
     public void SetLevelInfo(int index, Sprite image, Level levelTimeLoader)
     {
         levelIndex = index;
@@ -42,6 +32,25 @@ public class LevelSelectPreview : MonoBehaviour {
         levelTimeLoad = levelTimeLoader;
         GameManager.instance.checkLevelTime = levelTimeLoad;
         DisplayInfo();
+    }
+
+    void DisplayInfo()
+    {
+        if(!PreviewBox.activeInHierarchy)
+        {
+            PreviewBox.SetActive(true);
+        }
+        imageBox.GetComponent<Image>().sprite = levelImage;
+        // If the time is equal to our test time, then the time is set to N/A
+        if(PlayerPrefs.GetFloat(levelTimeLoad.ToString()) == 100000f)
+        {
+            timeText.GetComponent<Text>().text = "N/A";
+        }
+        else
+        {
+            timeText.GetComponent<Text>().text = GameManager.instance.gameObject.GetComponent<DataManager>().GetLevelTime(levelTimeLoad).ToString("F2");
+        }
+        
     }
 
     public void Play()

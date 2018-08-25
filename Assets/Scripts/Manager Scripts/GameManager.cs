@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour {
         if(!levelLoadedFromLevelSelect)
         {
             checkLevelTime = (Level)System.Enum.Parse(typeof(Level), "Level" + (currentScene - 1).ToString());
-            GetComponent<DataManager>().SubmitNewTime(timer.GetComponent<Timer>().time, checkLevelTime);
+            GetComponent<DataManager>().SubmitNewTime(timer.GetComponent<Timer>().levelTime, checkLevelTime);
             currentScene++;
             SceneManager.LoadScene(currentScene);
         }
@@ -88,9 +88,12 @@ public class GameManager : MonoBehaviour {
 
     public void playerDeathAnimation(Vector2 pos)
     {
-        //When the player dies pause the timer, but also add it to the total time
-        timer.GetComponent<Timer>().timerActive = false;
-        totalTime = timer.GetComponent<Timer>().time;
+        if(!levelLoadedFromLevelSelect)
+        {
+            //When the player dies pause the timer, but also add it to the total time
+            timer.GetComponent<Timer>().timerActive = false;
+            totalTime = timer.GetComponent<Timer>().time;
+        }
         GameObject newDeathParticle = Instantiate(deathParticle, pos, Quaternion.identity);
         newDeathParticle.GetComponent<ParticleSystem>().Play();
         StartCoroutine(ReloadLevel());

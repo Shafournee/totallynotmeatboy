@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour {
 
-    public float time = 0;
+    public float time;
+    public float levelTime;
     public bool timerActive;
 
 	// Use this for initialization
 	void Start () {
         time = GameManager.instance.totalTime;
+        levelTime = 0;
 	}
 	
 	// Update is called once per frame
@@ -20,9 +22,8 @@ public class Timer : MonoBehaviour {
         if (timerActive)
         {
             time += Time.deltaTime;
+            levelTime += Time.deltaTime;
         }
-
-
     }
 
 }

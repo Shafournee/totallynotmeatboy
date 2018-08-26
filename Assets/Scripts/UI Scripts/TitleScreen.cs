@@ -20,6 +20,8 @@ public class TitleScreen : MonoBehaviour {
             GameManager.instance.levelLoadedFromLevelSelect = false;
             // Reset the timer to zero when they return to the menu
             GameManager.instance.totalTime = 0f;
+            // Set the level index back to 2 for when they restart the game
+            GameManager.instance.currentScene = 2;
         }
 
         // Tell the Game Manager they aren't on Level Select

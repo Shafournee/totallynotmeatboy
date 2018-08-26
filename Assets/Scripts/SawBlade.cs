@@ -18,8 +18,7 @@ public class SawBlade : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-
-        transform.GetComponentInParent<Turret>().StartCoroutine(transform.GetComponentInParent<Turret>().SpawnParticles(transform.position));
+        transform.GetComponentInParent<Turret>().SpawnParticleCall(gameObject.transform.position);
         Destroy(gameObject);
     }
 

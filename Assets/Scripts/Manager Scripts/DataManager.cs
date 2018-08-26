@@ -36,6 +36,14 @@ public class DataManager : MonoBehaviour {
                 PlayerPrefs.SetFloat("Level2", playerTimes.Level2);
             }
         }
+        else if (level == Level.Level3)
+        {
+            if (newTime < playerTimes.Level3)
+            {
+                playerTimes.Level3 = newTime;
+                PlayerPrefs.SetFloat("Level3", playerTimes.Level3);
+            }
+        }
         else if(level == Level.Finish)
         {
             if (newTime < playerTimes.fullGameTime)
@@ -61,6 +69,10 @@ public class DataManager : MonoBehaviour {
         {
             return playerTimes.Level2;
         }
+        if (level == Level.Level3)
+        {
+            return playerTimes.Level3;
+        }
         else
         {
             return 10004324;
@@ -83,6 +95,10 @@ public class DataManager : MonoBehaviour {
         {
             playerTimes.Level2 = PlayerPrefs.GetFloat("Level2");
         }
+        if (PlayerPrefs.HasKey("Level3"))
+        {
+            playerTimes.Level3 = PlayerPrefs.GetFloat("Level3");
+        }
     }
 
     private void SetTimes()
@@ -98,6 +114,10 @@ public class DataManager : MonoBehaviour {
         else if (playerTimes.Level2 == 0f)
         {
             PlayerPrefs.SetFloat("Level2", 100000f);
+        }
+        else if (playerTimes.Level3 == 0f)
+        {
+            PlayerPrefs.SetFloat("Level3", 100000f);
         }
 
     }

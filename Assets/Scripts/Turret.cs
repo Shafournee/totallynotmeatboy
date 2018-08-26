@@ -64,10 +64,16 @@ public class Turret : MonoBehaviour {
 
     }
 
-    public IEnumerator SpawnParticles(Vector2 pos)
+    public void SpawnParticleCall(Vector2 pos)
+    {
+        StartCoroutine(SpawnParticles(pos));
+    }
+
+    IEnumerator SpawnParticles(Vector2 pos)
     {
         GameObject part = Instantiate(particles, pos, Quaternion.identity);
-        yield return new WaitForSeconds(.01f);
+        part.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(2f);
         Destroy(part);
     }
 }

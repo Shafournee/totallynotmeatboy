@@ -17,14 +17,18 @@ public class GameManager : MonoBehaviour {
     // Tracks the total time of the player
     public float totalTime;
 
+
+
     [SerializeField] GameObject playerSpawn;
     [SerializeField] GameObject spawnParticle;
     [SerializeField] GameObject deathParticle;
     public List<string> sceneNames;
-    int currentScene = 2;
+    public int currentScene = 2;
 
     // This will tell us if a level was loaded from level select. If so, load back to level select, otherwise load to next level
     public bool levelLoadedFromLevelSelect;
+    // Tracks if the game is paused or not
+    public bool gameIsPaused;
 
     private void Awake()
     {
@@ -53,9 +57,13 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(Input.GetKeyDown(KeyCode.P))
+        if(gameIsPaused)
         {
-            print(checkLevelTime);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
         }
 	}
 
@@ -106,6 +114,17 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(currentScene);
     }
 
+    public void RestartLevel()
+    {
+        if (!levelLoadedFromLevelSelect)
+        {
+            //When the player dies pause the timer, but also add it to the total time
+            timer.GetComponent<Timer>().timerActive = false;
+            totalTime = timer.GetComponent<Timer>().time;
+        }
+        SceneManager.LoadScene(currentScene);
+    }
+
     public void StartLevel()
     {
         StartCoroutine(LevelStart());
@@ -121,6 +140,7 @@ public class GameManager : MonoBehaviour {
         //Disable the player to start the spawn animation
         player.SetActive(false);
         GameObject newPlayerSpawn = Instantiate(playerSpawn, new Vector2(pos.x, pos.y - 2f), Quaternion.identity);
+        newPlayerSpawn.GetComponent<SpriteRenderer>().sortingOrder = -10;
         GameObject newSpawnParticle = Instantiate(spawnParticle, new Vector2(pos.x, pos.y - 2f), Quaternion.identity);
         // Set the spawn particle to be the child of the player spawn so it moves with it
         newSpawnParticle.transform.parent = newPlayerSpawn.transform;

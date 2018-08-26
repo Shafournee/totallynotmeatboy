@@ -5,10 +5,13 @@ using UnityEngine;
 public class Camera : MonoBehaviour {
 
     public GameObject player;
+    [SerializeField] float biggestYValue;
+    [SerializeField] float smallestYValue;
+    [SerializeField] float biggestXValue;
+    [SerializeField] float smallestXValue;
 
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -17,6 +20,7 @@ public class Camera : MonoBehaviour {
         if(player != null)
         {
             transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+
         }
 
 	}

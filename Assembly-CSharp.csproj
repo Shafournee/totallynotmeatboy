@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\UI Scripts\FinishScreen.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\LevelSelectButtons.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\LevelSelectPreview.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\Timer.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\TitleScreen.cs" />
     <Reference Include="UnityEditor.StandardEvents">

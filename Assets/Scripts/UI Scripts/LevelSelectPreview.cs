@@ -31,6 +31,7 @@ public class LevelSelectPreview : MonoBehaviour {
         levelImage = image;
         levelTimeLoad = levelTimeLoader;
         GameManager.instance.checkLevelTime = levelTimeLoad;
+        GameManager.instance.currentScene = index;
         DisplayInfo();
     }
 

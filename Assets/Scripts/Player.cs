@@ -50,15 +50,30 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Movement();
-        WallJump();
-
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.instance.gameIsPaused = !GameManager.instance.gameIsPaused;
+        }
+        if(!GameManager.instance.gameIsPaused)
+        {
+            Movement();
+            WallJump();
+            AdjustCollider();
+        }
 	}
 
     private void FixedUpdate()
     {
+        if(!GameManager.instance.gameIsPaused)
+        {
+            ApplyForce();
+        }
+    }
+
+    void ApplyForce()
+    {
         // Set the speed to be the airspeed or groundspeed depending if aired or grounded
-        if(PlayerCanJump())
+        if (PlayerCanJump())
         {
             trueSpeed = speed;
         }
@@ -68,39 +83,39 @@ public class Player : MonoBehaviour {
         }
 
         // Cap the players movement speed at 20f
-        if(rigidBody.velocity.y >= 20f)
+        if (rigidBody.velocity.y >= 20f)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 20f);
         }
 
         // If the player goes from left to right immediately, set their velocity to zero first so they don't slide
-        if(rigidBody.velocity.x > 0 && move == MoveDirection.left || rigidBody.velocity.x < 0 && move == MoveDirection.right)
+        if (rigidBody.velocity.x > 0 && move == MoveDirection.left || rigidBody.velocity.x < 0 && move == MoveDirection.right)
         {
             rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
         }
         // Moving left
-        else if(move == MoveDirection.left && rigidBody.velocity.x > -speedCap)
+        else if (move == MoveDirection.left && rigidBody.velocity.x > -speedCap)
         {
             rigidBody.AddForce(new Vector2(-trueSpeed, 0f));
         }
         // Moving right
-        else if(move == MoveDirection.right && rigidBody.velocity.x < speedCap)
+        else if (move == MoveDirection.right && rigidBody.velocity.x < speedCap)
         {
             rigidBody.AddForce(new Vector2(trueSpeed, 0f));
         }
         // If the player is not moving, set their velocity to zero
-        else if(move == MoveDirection.none)
+        else if (move == MoveDirection.none)
         {
             rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
         }
 
-        if(slidingDownWall)
+        if (slidingDownWall)
         {
-            if(rigidBody.velocity.y > 5f)
+            if (rigidBody.velocity.y > 5f)
             {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 5f);
             }
-            else if(rigidBody.velocity.y < -5f)
+            else if (rigidBody.velocity.y < -5f)
             {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, -5f);
             }
@@ -111,6 +126,31 @@ public class Player : MonoBehaviour {
         }
 
         rigidBody.AddForce(new Vector2(0f, -4f));
+    }
+
+    // Need to adjust the player collider while in the air or facing different directions
+    void AdjustCollider()
+    {
+
+
+        if (move == MoveDirection.right && PlayerCanJump())
+        {
+            GetComponent<BoxCollider2D>().offset = new Vector2(0f, -0.04382288f);
+        }
+        else if (move == MoveDirection.left && PlayerCanJump())
+        {
+            GetComponent<BoxCollider2D>().offset = new Vector2(0f, -0.04382288f);
+        }
+        /*
+        else if (move == MoveDirection.right && !PlayerCanJump())
+        {
+            GetComponent<BoxCollider2D>().offset = new Vector2(-.1f, -0.04382288f);
+        }
+        else if (move == MoveDirection.left && !PlayerCanJump())
+        {
+            GetComponent<BoxCollider2D>().offset = new Vector2(.1f, -0.04382288f);
+        }
+        */
     }
 
     void WallJump()

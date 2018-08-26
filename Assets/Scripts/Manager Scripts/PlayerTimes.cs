@@ -13,5 +13,5 @@ public class PlayerTimes
     public float Level2;
     public float Level3;
 
-    public float[] Level = new float[2];
+    public float[] Level = new float[5];
 }

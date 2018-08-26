@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4327613750908886}
   - component: {fileID: 114125686716491266}
   - component: {fileID: 114524901443941842}
+  - component: {fileID: 81533223196612544}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -41,6 +42,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &81533223196612544
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1300600123531582}
+  m_Enabled: 1
 --- !u!114 &114125686716491266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -61,7 +69,9 @@ MonoBehaviour:
   deathParticle: {fileID: 1568633043505398, guid: 6d566a3c0b1dea84eadf4d368585937c,
     type: 2}
   sceneNames: []
+  currentScene: 2
   levelLoadedFromLevelSelect: 0
+  gameIsPaused: 0
 --- !u!114 &114524901443941842
 MonoBehaviour:
   m_ObjectHideFlags: 1

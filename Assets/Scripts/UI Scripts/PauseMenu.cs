@@ -29,6 +29,11 @@ public class PauseMenu : MonoBehaviour {
         }
     }
 
+    public void Unpause()
+    {
+        GameManager.instance.gameIsPaused = false;
+    }
+
     public void RestartLevel()
     {
         GameManager.instance.RestartLevel();

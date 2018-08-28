@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
 
     PlayerAnimationHandler anim;
 
-
+    float stickDeadZone = .3f;
 
     [SerializeField] float speed = 10f;
     [SerializeField] float airSpeed = 5f;
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("StartButton"))
         {
             GameManager.instance.gameIsPaused = !GameManager.instance.gameIsPaused;
         }
@@ -160,7 +160,7 @@ public class Player : MonoBehaviour {
         if(Physics2D.Raycast(playerRight, Vector2.right, .01f))
         {
 
-            if(!PlayerCanJump() && Input.GetKey(right))
+            if(!PlayerCanJump() && Input.GetKey(right) || Input.GetAxis("HorizontalStick") > stickDeadZone)
             {
                 // If you're on a wall, the player is sliding down the wall and can wall jump
                 CanWallJump = true;
@@ -174,7 +174,7 @@ public class Player : MonoBehaviour {
         }
         else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))
         {
-            if (!PlayerCanJump() && Input.GetKey(left))
+            if (!PlayerCanJump() && Input.GetKey(left) || Input.GetAxis("HorizontalStick") < -stickDeadZone)
             {
                 CanWallJump = true;
                 slidingDownWall = true;
@@ -200,18 +200,18 @@ public class Player : MonoBehaviour {
 
     void Movement()
     {
-        if(Input.GetKeyDown(space) && (slidingDownWall || CanWallJump))
+        if(Input.GetKeyDown(space) || Input.GetButtonDown("AButton") && (slidingDownWall || CanWallJump))
         {
             StartCoroutine(WallJumping());
             anim.currentState = PlayerStates.jumping;
         }
-        else if(Input.GetKeyDown(space) && PlayerCanJump())
+        else if(Input.GetKeyDown(space) || Input.GetButtonDown("AButton") && PlayerCanJump())
         {
             StartCoroutine(Jumping());
             anim.currentState = PlayerStates.jumping;
         }
 
-        if(Input.GetKey(right))
+        if(Input.GetKey(right) || Input.GetAxis("HorizontalStick") > stickDeadZone)
         {
             move = MoveDirection.right;
             animDirection = MoveDirection.right;
@@ -220,7 +220,7 @@ public class Player : MonoBehaviour {
                 anim.currentState = PlayerStates.running;
             }
         }
-        else if (Input.GetKey(left))
+        else if (Input.GetKey(left) || Input.GetAxis("HorizontalStick") < -stickDeadZone)
         {
             move = MoveDirection.left;
             animDirection = MoveDirection.left;
@@ -273,7 +273,7 @@ public class Player : MonoBehaviour {
             }
 
             // Otherwise, if they stop holding space set velocity to zero and break out
-            else if(Input.GetKeyUp(space))
+            else if(Input.GetKeyUp(space) || Input.GetButtonUp("AButton"))
             {
 
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
@@ -302,7 +302,7 @@ public class Player : MonoBehaviour {
         while (CurrentlyJumping)
         {
             // Otherwise, if they stop holding space set velocity to zero and break out
-            if (Input.GetKeyUp(space))
+            if (Input.GetKeyUp(space) || Input.GetButtonUp("AButton"))
             {
 
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
@@ -336,7 +336,7 @@ public class Player : MonoBehaviour {
         {
             rigidBody.AddForce(new Vector2(vertJumpSpeed/2, 0f));
             yield return new WaitForFixedUpdate();
-            if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left || Input.GetKeyUp(space))
+            if (vertJumpSpeed > 0 && move == MoveDirection.right || vertJumpSpeed < 0 && move == MoveDirection.left || Input.GetKeyUp(space) || Input.GetButtonUp("AButton"))
             {
                 rigidBody.velocity = new Vector2(0f, rigidBody.velocity.y);
                 trueSpeed = airSpeed;

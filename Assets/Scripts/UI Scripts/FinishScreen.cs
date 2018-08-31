@@ -14,6 +14,7 @@ public class FinishScreen : MonoBehaviour {
         {
             finishText.GetComponent<Text>().text = GameManager.instance.totalTime.ToString("F2");
             GameManager.instance.gameObject.GetComponent<DataManager>().SubmitNewTime(GameManager.instance.totalTime, Level.Finish);
+            GameManager.instance.totalTime = 0f;
         }
 
 	}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Level { Level1, Level2, Level3, Finish };
+public enum Level { Level1, Level2, Level3, Level4, Level5, Level6, Finish };
 
 public class PlayerTimes
 {
@@ -12,6 +12,7 @@ public class PlayerTimes
     public float Level1;
     public float Level2;
     public float Level3;
-
-    public float[] Level = new float[5];
+    public float Level4;
+    public float Level5;
+    public float Level6;
 }

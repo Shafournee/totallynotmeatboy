@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour {
         else
         {
             GetComponent<DataManager>().SubmitNewTime(timer.GetComponent<Timer>().time, checkLevelTime);
+            totalTime = 0;
             SceneManager.LoadScene("LevelSelect");
         }
     }

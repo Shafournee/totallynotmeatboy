@@ -124,7 +124,7 @@ MonoBehaviour:
   airSpeed: 20
   trueSpeed: 0
   speedCap: 15
-  jumpSpeed: 700
+  jumpSpeed: 750
 --- !u!212 &212930537119265708
 SpriteRenderer:
   m_ObjectHideFlags: 1

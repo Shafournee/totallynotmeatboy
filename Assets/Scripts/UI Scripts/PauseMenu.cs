@@ -42,6 +42,15 @@ public class PauseMenu : MonoBehaviour {
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("TitleScreen");
+        GameManager.instance.gameIsPaused = false;
+        if (GameManager.instance.levelLoadedFromLevelSelect)
+        {
+            SceneManager.LoadScene("LevelSelect");
+        }
+        else
+        {
+            SceneManager.LoadScene("TitleScreen");
+        }
+
     }
 }

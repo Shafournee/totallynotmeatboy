@@ -60,6 +60,7 @@ public class Player : MonoBehaviour {
             WallJump();
             AdjustCollider();
         }
+        print(CanWallJump);
 	}
 
     private void FixedUpdate()
@@ -160,7 +161,7 @@ public class Player : MonoBehaviour {
         if(Physics2D.Raycast(playerRight, Vector2.right, .01f))
         {
 
-            if(!PlayerCanJump() && Input.GetKey(right) || Input.GetAxis("HorizontalStick") > stickDeadZone)
+            if(!PlayerCanJump() && (Input.GetKey(right) || Input.GetAxis("HorizontalStick") > stickDeadZone))
             {
                 // If you're on a wall, the player is sliding down the wall and can wall jump
                 CanWallJump = true;
@@ -174,7 +175,7 @@ public class Player : MonoBehaviour {
         }
         else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))
         {
-            if (!PlayerCanJump() && Input.GetKey(left) || Input.GetAxis("HorizontalStick") < -stickDeadZone)
+            if (!PlayerCanJump() && (Input.GetKey(left) || Input.GetAxis("HorizontalStick") < -stickDeadZone))
             {
                 CanWallJump = true;
                 slidingDownWall = true;
@@ -200,12 +201,12 @@ public class Player : MonoBehaviour {
 
     void Movement()
     {
-        if(Input.GetKeyDown(space) || Input.GetButtonDown("AButton") && (slidingDownWall || CanWallJump))
+        if((Input.GetKeyDown(space) || Input.GetButtonDown("AButton")) && CanWallJump)
         {
             StartCoroutine(WallJumping());
             anim.currentState = PlayerStates.jumping;
         }
-        else if(Input.GetKeyDown(space) || Input.GetButtonDown("AButton") && PlayerCanJump())
+        else if((Input.GetKeyDown(space) || Input.GetButtonDown("AButton")) && PlayerCanJump())
         {
             StartCoroutine(Jumping());
             anim.currentState = PlayerStates.jumping;
@@ -290,7 +291,6 @@ public class Player : MonoBehaviour {
         // Keep track of the initial position, and if they're currently jumping
         // Wait until the next fixed update to apply force
         Vector2 initialJump = transform.position;
-
         slidingDownWall = false;
         yield return new WaitForFixedUpdate();
         rigidBody.velocity = new Vector2(0f, 0f);

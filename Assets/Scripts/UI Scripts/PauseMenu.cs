@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class PauseMenu : MonoBehaviour {
 
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject selectArrow;
 
 	// Use this for initialization
 	void Start () {
@@ -15,6 +17,7 @@ public class PauseMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         TogglePauseMenu();
+        SelectionArrow();
 	}
 
     private void TogglePauseMenu()
@@ -52,5 +55,15 @@ public class PauseMenu : MonoBehaviour {
             SceneManager.LoadScene("TitleScreen");
         }
 
+    }
+
+    void SelectionArrow()
+    {
+
+        if (EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>() != null)
+        {
+            Vector2 pos = new Vector2(EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.x - 220f, EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.y - 15f);
+            selectArrow.GetComponent<RectTransform>().anchoredPosition = pos;
+        }
     }
 }

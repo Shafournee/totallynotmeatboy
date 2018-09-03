@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SawBlade : MonoBehaviour {
 
-
+    [SerializeField] bool stationarySaw;
 
 	// Use this for initialization
 	void Start () {
@@ -18,8 +18,11 @@ public class SawBlade : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        transform.GetComponentInParent<Turret>().SpawnParticleCall(gameObject.transform.position);
-        Destroy(gameObject);
+        if(!stationarySaw)
+        {
+            transform.GetComponentInParent<Turret>().SpawnParticleCall(gameObject.transform.position);
+            Destroy(gameObject);
+        }
     }
 
 }

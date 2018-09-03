@@ -68,6 +68,38 @@ public class DataManager : MonoBehaviour {
                 PlayerPrefs.SetFloat("Level6", playerTimes.Level6);
             }
         }
+        else if (level == Level.Level7)
+        {
+            if (newTime < playerTimes.Level7)
+            {
+                playerTimes.Level7 = newTime;
+                PlayerPrefs.SetFloat("Level7", playerTimes.Level7);
+            }
+        }
+        else if (level == Level.Level8)
+        {
+            if (newTime < playerTimes.Level8)
+            {
+                playerTimes.Level8 = newTime;
+                PlayerPrefs.SetFloat("Level8", playerTimes.Level8);
+            }
+        }
+        else if (level == Level.Level9)
+        {
+            if (newTime < playerTimes.Level9)
+            {
+                playerTimes.Level9 = newTime;
+                PlayerPrefs.SetFloat("Level9", playerTimes.Level9);
+            }
+        }
+        else if (level == Level.Level10)
+        {
+            if (newTime < playerTimes.Level10)
+            {
+                playerTimes.Level10 = newTime;
+                PlayerPrefs.SetFloat("Level10", playerTimes.Level10);
+            }
+        }
         else if(level == Level.Finish)
         {
             if (newTime < playerTimes.fullGameTime)
@@ -109,9 +141,25 @@ public class DataManager : MonoBehaviour {
         {
             return playerTimes.Level6;
         }
+        if (level == Level.Level7)
+        {
+            return playerTimes.Level7;
+        }
+        if (level == Level.Level8)
+        {
+            return playerTimes.Level8;
+        }
+        if (level == Level.Level9)
+        {
+            return playerTimes.Level9;
+        }
+        if (level == Level.Level10)
+        {
+            return playerTimes.Level10;
+        }
         else
         {
-            return 10004324;
+            return 100000f;
         }
     }
 
@@ -147,6 +195,22 @@ public class DataManager : MonoBehaviour {
         {
             playerTimes.Level6 = PlayerPrefs.GetFloat("Level6");
         }
+        if (PlayerPrefs.HasKey("Level7"))
+        {
+            playerTimes.Level7 = PlayerPrefs.GetFloat("Level7");
+        }
+        if (PlayerPrefs.HasKey("Level8"))
+        {
+            playerTimes.Level8 = PlayerPrefs.GetFloat("Level8");
+        }
+        if (PlayerPrefs.HasKey("Level9"))
+        {
+            playerTimes.Level9 = PlayerPrefs.GetFloat("Level9");
+        }
+        if (PlayerPrefs.HasKey("Level10"))
+        {
+            playerTimes.Level10 = PlayerPrefs.GetFloat("Level10");
+        }
     }
 
     private void SetTimes()
@@ -178,6 +242,22 @@ public class DataManager : MonoBehaviour {
         else if (playerTimes.Level6 == 0f)
         {
             PlayerPrefs.SetFloat("Level6", 100000f);
+        }
+        else if (playerTimes.Level7 == 0f)
+        {
+            PlayerPrefs.SetFloat("Level7", 100000f);
+        }
+        else if (playerTimes.Level8 == 0f)
+        {
+            PlayerPrefs.SetFloat("Level8", 100000f);
+        }
+        else if (playerTimes.Level9 == 0f)
+        {
+            PlayerPrefs.SetFloat("Level9", 100000f);
+        }
+        else if (playerTimes.Level10 == 0f)
+        {
+            PlayerPrefs.SetFloat("Level10", 100000f);
         }
 
     }

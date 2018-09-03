@@ -170,7 +170,6 @@ public class Player : MonoBehaviour {
                 firstTimeOffWall = true;
                 anim.currentState = PlayerStates.wallsliding;
                 vertJumpSpeed = -1000f;
-
             }
         }
         else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))

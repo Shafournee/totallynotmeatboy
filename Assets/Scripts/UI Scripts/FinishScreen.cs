@@ -10,12 +10,7 @@ public class FinishScreen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        if(GameManager.instance != null)
-        {
-            finishText.GetComponent<Text>().text = GameManager.instance.totalTime.ToString("F2");
-            GameManager.instance.gameObject.GetComponent<DataManager>().SubmitNewTime(GameManager.instance.totalTime, Level.Finish);
-            GameManager.instance.totalTime = 0f;
-        }
+        
 
 	}
 	
@@ -24,8 +19,18 @@ public class FinishScreen : MonoBehaviour {
 		
 	}
 
+    public void finishTime()
+    {
+        if (GameManager.instance != null)
+        {
+            finishText.GetComponent<Text>().text = GameManager.instance.totalTime.ToString("F2") + " Seconds";
+            GameManager.instance.gameObject.GetComponent<DataManager>().SubmitNewTime(GameManager.instance.totalTime, Level.Finish);
+            GameManager.instance.totalTime = 0f;
+        }
+    }
+
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene("TitleScreen");
+        GameManager.instance.LevelFinished();
     }
 }

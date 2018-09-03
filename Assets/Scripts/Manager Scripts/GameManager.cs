@@ -84,7 +84,15 @@ public class GameManager : MonoBehaviour {
             checkLevelTime = (Level)System.Enum.Parse(typeof(Level), "Level" + (currentScene - 1).ToString());
             GetComponent<DataManager>().SubmitNewTime(timer.GetComponent<Timer>().levelTime, checkLevelTime);
             currentScene++;
-            SceneManager.LoadScene(currentScene);
+            if(currentScene == 12)
+            {
+                currentScene = 2;
+                SceneManager.LoadScene("TitleScreen");
+            }
+            else
+            {
+                SceneManager.LoadScene(currentScene);
+            }
         }
         else
         {
@@ -158,5 +166,9 @@ public class GameManager : MonoBehaviour {
         // Reactive the player, and set the timer to active
         player.SetActive(true);
         timer.GetComponent<Timer>().timerActive = true;
+        if(GameObject.FindGameObjectWithTag("Boss"))
+        {
+            StartCoroutine(GameObject.FindGameObjectWithTag("Boss").GetComponent<Boss>().ThrowSpears());
+        }
     }
 }

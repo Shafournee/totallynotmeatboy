@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class TitleScreen : MonoBehaviour {
 
@@ -10,9 +11,11 @@ public class TitleScreen : MonoBehaviour {
     [SerializeField] List<Sprite> sprites;
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject bestTime;
+    [SerializeField] GameObject selectArrow;
+    [SerializeField] List<GameObject> buttons;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         StartCoroutine(Running());
         if(GameManager.instance != null)
         {
@@ -23,13 +26,12 @@ public class TitleScreen : MonoBehaviour {
             // Set the level index back to 2 for when they restart the game
             GameManager.instance.currentScene = 2;
         }
-
-        // Tell the Game Manager they aren't on Level Select
 	}
 	
 	// Update is called once per frame
 	void Update () {
         sausageBoy.transform.Rotate(Vector3.forward * Time.deltaTime * 5f);
+        SelectionArrow();
 	}
 
     IEnumerator Running()
@@ -72,11 +74,30 @@ public class TitleScreen : MonoBehaviour {
         
     }
 
+    void SelectionArrow()
+    {
+
+        if(EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>() != null)
+        {
+            Vector2 pos = new Vector2(EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.x - 350f, EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.y - 30f);
+            selectArrow.GetComponent<RectTransform>().anchoredPosition = pos;
+        }
+    }
+
+
     // A test button used for resetting times
     public void ResetTimes()
     {
         PlayerPrefs.SetFloat("fullGameTime", 100000f);
         PlayerPrefs.SetFloat("Level1", 100000f);
         PlayerPrefs.SetFloat("Level2", 100000f);
+        PlayerPrefs.SetFloat("Level3", 100000f);
+        PlayerPrefs.SetFloat("Level4", 100000f);
+        PlayerPrefs.SetFloat("Level5", 100000f);
+        PlayerPrefs.SetFloat("Level6", 100000f);
+        PlayerPrefs.SetFloat("Level7", 100000f);
+        PlayerPrefs.SetFloat("Level8", 100000f);
+        PlayerPrefs.SetFloat("Level9", 100000f);
+        PlayerPrefs.SetFloat("Level10", 100000f);
     }
 }

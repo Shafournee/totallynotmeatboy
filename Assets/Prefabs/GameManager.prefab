@@ -68,7 +68,17 @@ MonoBehaviour:
     type: 2}
   deathParticle: {fileID: 1568633043505398, guid: 6d566a3c0b1dea84eadf4d368585937c,
     type: 2}
-  sceneNames: []
+  sceneNames:
+  - Level1
+  - Level2
+  - Level3
+  - Level4
+  - Level5
+  - Level6
+  - Level7
+  - Level8
+  - Level9
+  - Level10
   currentScene: 2
   levelLoadedFromLevelSelect: 0
   gameIsPaused: 0

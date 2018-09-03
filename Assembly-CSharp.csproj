@@ -61,6 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Boss Scripts\Boss.cs" />
+    <Compile Include="Assets\Scripts\Boss Scripts\BossArm.cs" />
+    <Compile Include="Assets\Scripts\Boss Scripts\BossKill.cs" />
+    <Compile Include="Assets\Scripts\Boss Scripts\BossLeg.cs" />
+    <Compile Include="Assets\Scripts\Boss Scripts\BossThrower.cs" />
     <Compile Include="Assets\Scripts\Camera.cs" />
     <Compile Include="Assets\Scripts\DeathZone.cs" />
     <Compile Include="Assets\Scripts\Exit.cs" />
@@ -77,6 +82,7 @@
     <Compile Include="Assets\Scripts\UI Scripts\FinishScreen.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\LevelSelectButtons.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\LevelSelectPreview.cs" />
+    <Compile Include="Assets\Scripts\UI Scripts\MouseOver.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\Timer.cs" />
     <Compile Include="Assets\Scripts\UI Scripts\TitleScreen.cs" />

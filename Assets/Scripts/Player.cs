@@ -158,7 +158,7 @@ public class Player : MonoBehaviour {
     {
         Vector2 playerRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x + .01f, transform.position.y);
         Vector2 playerLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x - .01f, transform.position.y);
-        if(Physics2D.Raycast(playerRight, Vector2.right, .01f))
+        if(Physics2D.Raycast(playerRight, Vector2.right, .05f))
         {
 
             if(!PlayerCanJump() && (Input.GetKey(right) || Input.GetAxis("HorizontalStick") > stickDeadZone))
@@ -172,7 +172,7 @@ public class Player : MonoBehaviour {
                 vertJumpSpeed = -1000f;
             }
         }
-        else if(Physics2D.Raycast(playerLeft, Vector2.left, .01f))
+        else if(Physics2D.Raycast(playerLeft, Vector2.left, .05f))
         {
             if (!PlayerCanJump() && (Input.GetKey(left) || Input.GetAxis("HorizontalStick") < -stickDeadZone))
             {
@@ -247,7 +247,7 @@ public class Player : MonoBehaviour {
     {
         Vector2 playerBottomLeft = new Vector2(GetComponent<BoxCollider2D>().bounds.min.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
         Vector2 playerBottomRight = new Vector2(GetComponent<BoxCollider2D>().bounds.max.x, GetComponent<BoxCollider2D>().bounds.min.y - .01f);
-        if (Physics2D.Raycast(playerBottomLeft, Vector2.down, .01f) || Physics2D.Raycast(playerBottomRight, Vector2.down, .01f))
+        if (Physics2D.Raycast(playerBottomLeft, Vector2.down, .2f) || Physics2D.Raycast(playerBottomRight, Vector2.down, .2f))
             return true;
 
         else
@@ -292,11 +292,11 @@ public class Player : MonoBehaviour {
         Vector2 initialJump = transform.position;
         slidingDownWall = false;
         yield return new WaitForFixedUpdate();
-        rigidBody.velocity = new Vector2(0f, 0f);
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
         StartCoroutine(VertJumpingForce());
         yield return new WaitForFixedUpdate();
 
-        rigidBody.AddForce(new Vector2(0f, jumpSpeed));
+        rigidBody.AddForce(new Vector2(0f, jumpSpeed/1.2f));
         CurrentlyJumping = true;
         while (CurrentlyJumping)
         {
@@ -309,11 +309,11 @@ public class Player : MonoBehaviour {
             }
             else if (move == MoveDirection.right && rigidBody.velocity.x < 0 )
             {
-                rigidBody.velocity = new Vector2(-20f, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(-50f, rigidBody.velocity.y);
             }
             else if(move == MoveDirection.left && rigidBody.velocity.x > 0)
             {
-                rigidBody.velocity = new Vector2(20f, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(50f, rigidBody.velocity.y);
             }
 
             // If velocity in the Y direction becomes zero break out of the loop

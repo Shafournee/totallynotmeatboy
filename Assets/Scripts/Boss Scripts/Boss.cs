@@ -32,9 +32,9 @@ public class Boss : MonoBehaviour {
     {
         if (player != null && player.activeInHierarchy && canThrowSpears)
         {
-            if (Vector3.Distance(new Vector3(player.transform.position.x, 0f), new Vector3(transform.position.x, 0f)) >= 5f)
+            if (Vector3.Distance(new Vector3(player.transform.position.x, 0f), new Vector3(transform.position.x, 0f)) >= 7f)
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(12f, 0f);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(13f, 0f);
             }
             else if (player.transform.position.x < transform.position.x)
             {
@@ -42,7 +42,7 @@ public class Boss : MonoBehaviour {
             }
             else
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(3f, 0f);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(5f, 0f);
             }
         }
         else

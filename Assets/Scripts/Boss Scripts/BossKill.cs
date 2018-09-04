@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BossKill : MonoBehaviour {
 
     GameObject player;
     [SerializeField] GameObject playerStandIn;
     [SerializeField] GameObject EndScreen;
+    [SerializeField] GameObject EndButton;
 
 	// Use this for initialization
 	void Start () {
@@ -46,16 +48,16 @@ public class BossKill : MonoBehaviour {
         newPlayer.GetComponent<Rigidbody2D>().freezeRotation = true;
         newPlayer.AddComponent<BoxCollider2D>();
         GameManager.instance.FinishLevel();
-        yield return new WaitForSeconds(5f);
-        Boss.GetComponent<Rigidbody2D>().gravityScale = 1000f;
-
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         if (GameManager.instance.levelLoadedFromLevelSelect)
         {
             GameManager.instance.LevelFinished();
         }
+        Boss.GetComponent<Rigidbody2D>().gravityScale = 1000f;
+        yield return new WaitForSeconds(1f);
         EndScreen.SetActive(true);
         EndScreen.GetComponent<FinishScreen>().finishTime();
+        EventSystem.current.SetSelectedGameObject(EndButton);
         // If the level was loaded from level select just go back to level select. Otherwise play the cutscene
     }
 

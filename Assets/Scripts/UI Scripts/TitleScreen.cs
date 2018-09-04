@@ -13,6 +13,7 @@ public class TitleScreen : MonoBehaviour {
     [SerializeField] GameObject bestTime;
     [SerializeField] GameObject selectArrow;
     [SerializeField] List<GameObject> buttons;
+    [SerializeField] GameObject FirstButton;
 
     // Use this for initialization
     void Start () {
@@ -32,7 +33,11 @@ public class TitleScreen : MonoBehaviour {
 	void Update () {
         sausageBoy.transform.Rotate(Vector3.forward * Time.deltaTime * 5f);
         SelectionArrow();
-	}
+        if(EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(FirstButton);
+        }
+    }
 
     IEnumerator Running()
     {

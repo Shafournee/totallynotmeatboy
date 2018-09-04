@@ -9,6 +9,8 @@ public class Camera : MonoBehaviour {
     [SerializeField] float smallestYValue;
     [SerializeField] float biggestXValue;
     [SerializeField] float smallestXValue;
+    float trueYPos;
+    float trueXPos;
     public bool finalLevel;
     public bool finalCutscene;
     bool CoroutineRunning;
@@ -35,7 +37,7 @@ public class Camera : MonoBehaviour {
             {
                 startPos = transform.position;
                 // Need to set this to the eventual final position, because this thing is broken for some reason lol
-                endPos = new Vector3(20.45f, transform.position.y, -10);
+                endPos = new Vector3(138.4f, transform.position.y, -10);
                 if (!CoroutineRunning)
                 {
                     CoroutineRunning = true;
@@ -46,12 +48,41 @@ public class Camera : MonoBehaviour {
             }
             else
             {
-                transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+                boundCamera();
             }
 
         }
 
 	}
+
+    void boundCamera()
+    {
+        if(player.transform.position.y > biggestYValue)
+        {
+            trueYPos = biggestYValue;
+        }
+        else if (player.transform.position.y < smallestYValue)
+        {
+            trueYPos = smallestYValue;
+        }
+        else
+        {
+            trueYPos = player.transform.position.y;
+        }
+        if(player.transform.position.x > biggestXValue)
+        {
+            trueXPos = biggestXValue;
+        }
+        else if (player.transform.position.x < smallestXValue)
+        {
+            trueXPos = smallestXValue;
+        }
+        else
+        {
+            trueXPos = player.transform.position.x;
+        }
+        transform.position = new Vector3(trueXPos, trueYPos, -10);
+    }
 
     IEnumerator FinalScene()
     {

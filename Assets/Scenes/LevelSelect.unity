@@ -459,7 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 3
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: dea56914ee822b34b8c08d738036eadb, type: 3}
   levelTimeLoader: 1
   canvas: {fileID: 1169553498}
 --- !u!114 &308924053
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 4
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: c291ab8cfb102664aaf5a423e252fcfe, type: 3}
   levelTimeLoader: 2
   canvas: {fileID: 1169553498}
 --- !u!114 &320984671
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 7
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 3359189532592884c9cefe36a45e290b, type: 3}
   levelTimeLoader: 5
   canvas: {fileID: 1169553498}
 --- !u!114 &560124545
@@ -1305,7 +1305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 5
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 7d14a8356e9b75b4abe4fdc2e14c890c, type: 3}
   levelTimeLoader: 3
   canvas: {fileID: 1169553498}
 --- !u!114 &582750737
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 10
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 93fd511f850a0504eb9d9b65f2427e88, type: 3}
   levelTimeLoader: 8
   canvas: {fileID: 1169553498}
 --- !u!114 &599957822
@@ -2157,7 +2157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 8
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 1f26686be77e7a84dba8d0665f64f103, type: 3}
   levelTimeLoader: 6
   canvas: {fileID: 1169553498}
 --- !u!114 &1026114263
@@ -2473,6 +2473,7 @@ MonoBehaviour:
   - {fileID: 21300006, guid: d80443fc8dde69946be0a70c297219bf, type: 3}
   selectArrow: {fileID: 1776509052}
   playButton: {fileID: 1495778640}
+  FirstButton: {fileID: 1308376298}
 --- !u!114 &1169553500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3275,7 +3276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 11
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 9e88d3475cd26264cb782925a95c0b19, type: 3}
   levelTimeLoader: 9
   canvas: {fileID: 1169553498}
 --- !u!114 &1760834306
@@ -3836,7 +3837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 6
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 573be88bdc00c7447834d70e278d9ac1, type: 3}
   levelTimeLoader: 4
   canvas: {fileID: 1169553498}
 --- !u!114 &2052935870
@@ -4095,7 +4096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelIndex: 9
-  levelImage: {fileID: 21300000, guid: b449a6b26fbd4074b8833bd217d4691d, type: 3}
+  levelImage: {fileID: 21300000, guid: 9601b13bee92cef4ba062519c81ad24e, type: 3}
   levelTimeLoader: 7
   canvas: {fileID: 1169553498}
 --- !u!114 &2112649056

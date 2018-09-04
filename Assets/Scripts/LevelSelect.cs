@@ -12,6 +12,7 @@ public class LevelSelect : MonoBehaviour
     [SerializeField] List<Sprite> sprites;
     [SerializeField] GameObject selectArrow;
     [SerializeField] GameObject playButton;
+    [SerializeField] GameObject FirstButton;
 
     // Use this for initialization
     void Start()
@@ -32,6 +33,10 @@ public class LevelSelect : MonoBehaviour
     void Update()
     {
         SelectionArrow();
+        if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            EventSystem.current.SetSelectedGameObject(FirstButton);
+        }
     }
 
     IEnumerator Running()

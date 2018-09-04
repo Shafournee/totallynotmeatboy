@@ -148,9 +148,9 @@ public class GameManager : MonoBehaviour {
         Vector3 pos = new Vector2(player.transform.position.x, player.transform.position.y);
         //Disable the player to start the spawn animation
         player.SetActive(false);
-        GameObject newPlayerSpawn = Instantiate(playerSpawn, new Vector2(pos.x, pos.y - 2f), Quaternion.identity);
+        GameObject newPlayerSpawn = Instantiate(playerSpawn, new Vector2(pos.x, pos.y - 1f), Quaternion.identity);
         newPlayerSpawn.GetComponent<SpriteRenderer>().sortingOrder = -10;
-        GameObject newSpawnParticle = Instantiate(spawnParticle, new Vector2(pos.x, pos.y - 2f), Quaternion.identity);
+        GameObject newSpawnParticle = Instantiate(spawnParticle, new Vector2(pos.x, pos.y - 1f), Quaternion.identity);
         // Set the spawn particle to be the child of the player spawn so it moves with it
         newSpawnParticle.transform.parent = newPlayerSpawn.transform;
         while (newPlayerSpawn.transform.position != pos)

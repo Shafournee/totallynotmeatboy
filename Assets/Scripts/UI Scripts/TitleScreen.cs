@@ -14,10 +14,18 @@ public class TitleScreen : MonoBehaviour {
     [SerializeField] GameObject selectArrow;
     [SerializeField] List<GameObject> buttons;
     [SerializeField] GameObject FirstButton;
+    [SerializeField] GameObject optionsScreen;
+    [SerializeField] GameObject resetTime;
+    [SerializeField] GameObject MusicVolumeText;
+    [SerializeField] GameObject EffectVolumeText;
+    int MusicVolume = 9;
+    int EffectVolume = 9;
+    bool onOptionsScreen;
 
     // Use this for initialization
     void Start () {
         StartCoroutine(Running());
+        ReturnToTitleScreen();
         if(GameManager.instance != null)
         {
             DisplayTimeText();
@@ -27,7 +35,11 @@ public class TitleScreen : MonoBehaviour {
             // Set the level index back to 2 for when they restart the game
             GameManager.instance.currentScene = 2;
         }
-	}
+
+        // TODO save volume in player prefs
+        EffectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
+        MusicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -82,13 +94,57 @@ public class TitleScreen : MonoBehaviour {
     void SelectionArrow()
     {
 
-        if(EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>() != null)
+        if(EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>() != null && !onOptionsScreen)
         {
             Vector2 pos = new Vector2(EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.x - 350f, EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.y - 30f);
             selectArrow.GetComponent<RectTransform>().anchoredPosition = pos;
         }
+        else if(EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>() != null && onOptionsScreen)
+        {
+            Vector2 pos = new Vector2(EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.x + 350f, EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().anchoredPosition.y - 30f);
+            selectArrow.GetComponent<RectTransform>().anchoredPosition = pos;
+        }
+
     }
 
+    public void ReturnToTitleScreen()
+    {
+        selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 0f);
+        optionsScreen.SetActive(false);
+        titleScreen.SetActive(true);
+        onOptionsScreen = false;
+    }
+
+    public void ReturnToOptionScreen()
+    {
+        selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 180f, 0f, 0f);
+        EventSystem.current.SetSelectedGameObject(resetTime);
+        titleScreen.SetActive(false);
+        optionsScreen.SetActive(true);
+        onOptionsScreen = true;
+    }
+
+    public void AdjustSoundEffects()
+    {
+        EffectVolume++;
+        if(EffectVolume > 9)
+        {
+            EffectVolume = 0;
+        }
+        EffectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
+        GameManager.instance.EffectAudio.volume = (float)EffectVolume/9;
+    }
+
+    public void AdjustMusic()
+    {
+        MusicVolume++;
+        if (MusicVolume > 9)
+        {
+            MusicVolume = 0;
+        }
+        MusicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
+        GameManager.instance.MusicAudio.volume = (float)MusicVolume / 9;
+    }
 
     // A test button used for resetting times
     public void ResetTimes()

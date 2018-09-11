@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour {
     // Tracks the total time of the player
     public float totalTime;
 
-
+    public AudioSource MusicAudio;
+    public AudioSource EffectAudio;
 
     [SerializeField] GameObject playerSpawn;
     [SerializeField] GameObject spawnParticle;
@@ -48,6 +49,10 @@ public class GameManager : MonoBehaviour {
         }
         // Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
+
+        AudioSource[] audios = GetComponents<AudioSource>();
+        MusicAudio = audios[0];
+        EffectAudio = audios[1];
     }
 
     // Use this for initialization

@@ -211,6 +211,8 @@ public class DataManager : MonoBehaviour {
         {
             playerTimes.Level10 = PlayerPrefs.GetFloat("Level10");
         }
+
+        LoadSoundPrefs();
     }
 
     private void SetTimes()
@@ -262,5 +264,17 @@ public class DataManager : MonoBehaviour {
 
     }
 
+    // Used for loading the players sound preferences
+    void LoadSoundPrefs()
+    {
+        if (PlayerPrefs.HasKey("MusicLevels"))
+        {
+            playerTimes.MusicLevels = PlayerPrefs.GetInt("MusicLevels");
+        }
+        if (PlayerPrefs.HasKey("EffectLevels"))
+        {
+            playerTimes.EffectLevels = PlayerPrefs.GetInt("EffectLevels");
+        }
+    }
 
 }

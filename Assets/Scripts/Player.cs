@@ -60,7 +60,6 @@ public class Player : MonoBehaviour {
             WallJump();
             AdjustCollider();
         }
-        print(CanWallJump);
 	}
 
     private void FixedUpdate()

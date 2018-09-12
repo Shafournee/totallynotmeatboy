@@ -19,4 +19,8 @@ public class PlayerTimes
     public float Level8;
     public float Level9;
     public float Level10;
+
+    // Save the player prefs for audio levels
+    public int MusicLevels;
+    public int EffectLevels;
 }

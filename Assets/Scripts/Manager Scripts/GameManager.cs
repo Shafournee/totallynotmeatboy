@@ -57,7 +57,8 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        MusicAudio.volume = (float)GetComponent<DataManager>().GetVolume("music") / 9;
+        EffectAudio.volume = (float)GetComponent<DataManager>().GetVolume("effect") / 9;
     }
 	
 	// Update is called once per frame
@@ -176,4 +177,5 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(GameObject.FindGameObjectWithTag("Boss").GetComponent<Boss>().ThrowSpears());
         }
     }
+
 }

@@ -15,11 +15,34 @@ public class TitleScreen : MonoBehaviour {
     [SerializeField] List<GameObject> buttons;
     [SerializeField] GameObject FirstButton;
     [SerializeField] GameObject optionsScreen;
-    [SerializeField] GameObject resetTime;
-    [SerializeField] GameObject MusicVolumeText;
-    [SerializeField] GameObject EffectVolumeText;
-    int MusicVolume = 9;
-    int EffectVolume = 9;
+    [SerializeField] GameObject creditsScreen;
+    [SerializeField] GameObject backFromCreditButton;
+
+    // ------ Options Menu Game Objects ----- //
+
+    // Buttons
+    [SerializeField] GameObject resetTimeButton;
+    [SerializeField] GameObject musicVolumeButton;
+    [SerializeField] GameObject effectVolumeButton;
+    [SerializeField] GameObject resetPopupNo;
+    [SerializeField] GameObject musicVolumeRaiseButton;
+    [SerializeField] GameObject effectVolumeRaiseButton;
+    [SerializeField] GameObject backButton;
+
+    // Text
+    [SerializeField] GameObject musicVolumeText;
+    [SerializeField] GameObject effectVolumeText;
+
+    // Popup Menus
+    [SerializeField] GameObject resetTimesPopup;
+    [SerializeField] GameObject musicVolumePopup;
+    [SerializeField] GameObject effectVolumePopup;
+
+    // Holds the current popupmenu
+    GameObject currentPopupMenu;
+
+    int MusicVolume = 5;
+    int EffectVolume = 5;
     bool onOptionsScreen;
 
     // Use this for initialization
@@ -37,8 +60,11 @@ public class TitleScreen : MonoBehaviour {
         }
 
         // TODO save volume in player prefs
-        EffectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
-        MusicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
+
+        EffectVolume = GameManager.instance.GetComponent<DataManager>().GetVolume("effect");
+        MusicVolume = GameManager.instance.GetComponent<DataManager>().GetVolume("music");
+        effectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
+        musicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
     }
 	
 	// Update is called once per frame
@@ -47,7 +73,32 @@ public class TitleScreen : MonoBehaviour {
         SelectionArrow();
         if(EventSystem.current.currentSelectedGameObject == null)
         {
-            EventSystem.current.SetSelectedGameObject(FirstButton);
+            if (titleScreen.activeInHierarchy)
+            {
+                EventSystem.current.SetSelectedGameObject(FirstButton);
+            }
+            else if (optionsScreen.activeInHierarchy && currentPopupMenu == null)
+            {
+                EventSystem.current.SetSelectedGameObject(resetTimeButton);
+            }
+            else if (currentPopupMenu == resetTimesPopup)
+            {
+                EventSystem.current.SetSelectedGameObject(resetPopupNo);
+            }
+            else if (currentPopupMenu == musicVolumePopup)
+            {
+                EventSystem.current.SetSelectedGameObject(musicVolumeRaiseButton);
+            }
+            else if (currentPopupMenu == effectVolumePopup)
+            {
+                EventSystem.current.SetSelectedGameObject(effectVolumeRaiseButton);
+            }
+        }
+        
+
+        if (currentPopupMenu != null && Input.GetButtonDown("Cancel"))
+        {
+            closePopup();
         }
     }
 
@@ -107,44 +158,145 @@ public class TitleScreen : MonoBehaviour {
 
     }
 
-    public void ReturnToTitleScreen()
-    {
-        selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 0f);
-        optionsScreen.SetActive(false);
-        titleScreen.SetActive(true);
-        onOptionsScreen = false;
-    }
-
     public void ReturnToOptionScreen()
     {
         selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 180f, 0f, 0f);
-        EventSystem.current.SetSelectedGameObject(resetTime);
+        EventSystem.current.SetSelectedGameObject(resetTimeButton);
         titleScreen.SetActive(false);
         optionsScreen.SetActive(true);
         onOptionsScreen = true;
     }
 
-    public void AdjustSoundEffects()
+    public void ReturnToCreditsScreen()
+    {
+        selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 0f);
+        EventSystem.current.SetSelectedGameObject(backFromCreditButton);
+        titleScreen.SetActive(false);
+        creditsScreen.SetActive(true);
+    }
+
+    // ------------------------ Options Screen Code ----------------------- //
+
+    public void ReturnToTitleScreen()
+    {
+        selectArrow.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 0f);
+        optionsScreen.SetActive(false);
+        creditsScreen.SetActive(false);
+        titleScreen.SetActive(true);
+        onOptionsScreen = false;
+        EventSystem.current.SetSelectedGameObject(FirstButton);
+    }
+
+    public void DisplayResetTimesScreen()
+    {
+        currentPopupMenu = resetTimesPopup;
+        showPopup();
+        EventSystem.current.SetSelectedGameObject(resetPopupNo);
+    }
+
+    public void DisplayMusicScreen()
+    {
+        currentPopupMenu = musicVolumePopup;
+        showPopup();
+        EventSystem.current.SetSelectedGameObject(musicVolumeRaiseButton);
+    }
+
+    public void DisplayEffectsScreen()
+    {
+        currentPopupMenu = effectVolumePopup;
+        showPopup();
+        EventSystem.current.SetSelectedGameObject(effectVolumeRaiseButton);
+    }
+
+    void showPopup()
+    {
+        // Disable buttons in background
+        backButton.SetActive(false);
+        resetTimeButton.SetActive(false);
+        musicVolumeButton.SetActive(false);
+        effectVolumeButton.SetActive(false);
+
+        currentPopupMenu.SetActive(true);
+    }
+
+    public void closePopup()
+    {
+        // Enable buttons in background
+        backButton.SetActive(true);
+        resetTimeButton.SetActive(true);
+        musicVolumeButton.SetActive(true);
+        effectVolumeButton.SetActive(true);
+
+
+        if (currentPopupMenu == resetTimesPopup)
+        {
+            EventSystem.current.SetSelectedGameObject(resetTimeButton);
+        }
+        else if(currentPopupMenu == musicVolumeButton)
+        {
+            EventSystem.current.SetSelectedGameObject(musicVolumeButton);
+        }
+        else if (currentPopupMenu == musicVolumeButton)
+        {
+            EventSystem.current.SetSelectedGameObject(effectVolumeButton);
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(resetTimeButton);
+        }
+
+        currentPopupMenu.SetActive(false);
+        currentPopupMenu = null;
+    }
+
+    public void RaiseSoundEffects()
     {
         EffectVolume++;
         if(EffectVolume > 9)
         {
             EffectVolume = 0;
         }
-        EffectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
+        GameManager.instance.GetComponent<DataManager>().submitNewVolume("effect", EffectVolume);
+        effectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
         GameManager.instance.EffectAudio.volume = (float)EffectVolume/9;
     }
 
-    public void AdjustMusic()
+    public void LowerSoundEffects()
+    {
+        EffectVolume--;
+        if (EffectVolume < 0)
+        {
+            EffectVolume = 9;
+        }
+        GameManager.instance.GetComponent<DataManager>().submitNewVolume("effect", EffectVolume);
+        effectVolumeText.GetComponent<Text>().text = EffectVolume.ToString();
+        GameManager.instance.EffectAudio.volume = (float)EffectVolume / 9;
+    }
+
+    public void RaiseMusic()
     {
         MusicVolume++;
         if (MusicVolume > 9)
         {
             MusicVolume = 0;
         }
-        MusicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
+        GameManager.instance.GetComponent<DataManager>().submitNewVolume("music", MusicVolume);
+        musicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
         GameManager.instance.MusicAudio.volume = (float)MusicVolume / 9;
     }
+
+    public void LowerMusic()
+    {
+        MusicVolume--;
+        if (MusicVolume < 0)
+        {
+            MusicVolume = 9;
+        }
+        GameManager.instance.GetComponent<DataManager>().submitNewVolume("music", MusicVolume);
+        musicVolumeText.GetComponent<Text>().text = MusicVolume.ToString();
+        GameManager.instance.MusicAudio.volume = (float)MusicVolume / 9;
+    }
+
 
     // A test button used for resetting times
     public void ResetTimes()

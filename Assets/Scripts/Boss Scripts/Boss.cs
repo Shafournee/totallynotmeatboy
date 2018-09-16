@@ -66,11 +66,14 @@ public class Boss : MonoBehaviour {
             yield break;
         }
 
-        GameObject newSpear = Instantiate(spear, thrower.transform.position, thrower.transform.rotation);
-        Vector3 normalizedVector = (player.transform.position - thrower.transform.position).normalized;
-        newSpear.GetComponent<Rigidbody2D>().velocity = normalizedVector * speed;
-        thrower.SetActive(false);
-        arm.GetComponent<BossArm>().spearThrown = true;
+        if(player != null)
+        {
+            GameObject newSpear = Instantiate(spear, thrower.transform.position, thrower.transform.rotation);
+            Vector3 normalizedVector = (player.transform.position - thrower.transform.position).normalized;
+            newSpear.GetComponent<Rigidbody2D>().velocity = normalizedVector * speed;
+            thrower.SetActive(false);
+            arm.GetComponent<BossArm>().spearThrown = true;
+        }
     }
 
     public IEnumerator MoveForwards()

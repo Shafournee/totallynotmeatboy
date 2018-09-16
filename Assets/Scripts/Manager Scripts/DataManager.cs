@@ -9,6 +9,7 @@ public class DataManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         LoadTimes();
+        LoadSoundPrefs();
         SetTimes();
 	}
 	
@@ -110,6 +111,22 @@ public class DataManager : MonoBehaviour {
         }
     }
 
+    public void submitNewVolume(string name, int level)
+    {
+        if(name == "music")
+        {
+            print(playerTimes.MusicLevels);
+            playerTimes.MusicLevels = level;
+            PlayerPrefs.SetInt("MusicLevels", playerTimes.MusicLevels);
+        }
+
+        else if (name == "effect")
+        {
+            playerTimes.EffectLevels = level;
+            PlayerPrefs.SetInt("EffectLevels", playerTimes.EffectLevels);
+        }
+    }
+
     public float GetFastestPlayerTime()
     {
         return playerTimes.fullGameTime;
@@ -160,6 +177,22 @@ public class DataManager : MonoBehaviour {
         else
         {
             return 100000f;
+        }
+    }
+
+    public int GetVolume(string name)
+    {
+        if(name == "music")
+        {
+            return playerTimes.MusicLevels;
+        }
+        if(name == "effect")
+        {
+            return playerTimes.EffectLevels;
+        }
+        else
+        {
+            return 5;
         }
     }
 

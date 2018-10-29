@@ -315,13 +315,15 @@ public class Player : MonoBehaviour {
                 rigidBody.velocity = new Vector2(50f, rigidBody.velocity.y);
             }
 
-            // If velocity in the Y direction becomes zero break out of the loop
+            // This caused jumping to break
+            // I'm keeping it for posterity
+            /*
             else if (rigidBody.velocity.y < 0 || transform.position.y >= initialJump.y + 4f)
             {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
                 CurrentlyJumping = false;
             }
-
+            */
             
             yield return null;
         }

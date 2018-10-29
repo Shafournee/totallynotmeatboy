@@ -166,3 +166,6 @@ E:\Unity Projects\totallynotmeatboy\obj\Debug\Assembly-CSharp.csproj.CoreCompile
 E:\Unity Projects\totallynotmeatboy\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 E:\Unity Projects\totallynotmeatboy\obj\Debug\Assembly-CSharp.dll
 E:\Unity Projects\totallynotmeatboy\obj\Debug\Assembly-CSharp.pdb
+E:\Unity Projects\totallynotmeatboy\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.dll
+E:\Unity Projects\totallynotmeatboy\Temp\bin\Debug\UnityEngine.WebGLModule.dll
+E:\Unity Projects\totallynotmeatboy\Temp\bin\Debug\UnityEngine.SpatialTrackingModule.xml
